@@ -1,21 +1,37 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { UserDataContext } from '../context/userContext';
 
 const UserSignupPage = () => {
-  const [userData, setUserData] = useState({});
-  const submitHandler = (e) => {
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserDataContext);
+
+  const submitHandler = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const formValues = {
       fullname: {
-        firstName: formData.get('first-name'),
-        lastName: formData.get('last-name'),
+        firstname: formData.get('first-name'),
+        lastname: formData.get('last-name'),
       },
       email: formData.get('email'),
       password: formData.get('password'),
     };
-    setUserData(formValues);
-    console.log(formValues);
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/users/register`,
+      formValues
+    );
+
+    if (response.status === 201) {
+      const data = response.data;
+      setUser(data.user);
+      localStorage.setItem('token', data.token);
+      navigate('/home');
+    }
+
+    console.log(formValues, response);
+    // setUserData(formValues);
   };
 
   return (
@@ -66,7 +82,7 @@ const UserSignupPage = () => {
             type="submit"
             className="bg-[#111] text-white font-semibold  mb-2 rounded px-4 py-2 w-full text-lg placeholder:text-base"
           >
-            Sign up
+            Create account
           </button>
         </form>
         <p className="text-center mb-3">
@@ -82,12 +98,6 @@ const UserSignupPage = () => {
           <span className="underline">Google Privacy Policy</span> and{' '}
           <span className="underline">Terms of Service apply</span>.
         </p>
-        {/* <Link
-          to={'/captain-login'}
-          className="bg-[#111] flex items-center justify-center text-white font-semibold  mb-5 rounded px-4 py-2 w-full text-lg placeholder:text-base"
-        >
-          Sign as Captain
-        </Link> */}
       </div>
     </div>
   );
