@@ -42,7 +42,7 @@ const HomePage = () => {
   const { user } = useContext(UserDataContext);
 
   useEffect(() => {
-    socket.emit('join', { userType: 'user', userId: user._id });
+    // socket.emit('join', { userType: 'user', userId: user._id });
   }, [user]);
 
   socket.on('ride-confirmed', (ride) => {
@@ -221,11 +221,11 @@ const HomePage = () => {
       />
       <div className="h-screen w-screen">
         <LiveTracking />
-        <img
+        {/* <img
           className="h-full w-full object-cover"
           src="https://miro.medium.com/v2/resize:fit:720/format:webp/0*f4GFA9sUqA0uIUmW.jpg "
           alt=""
-        />
+        /> */}
       </div>
       <div className=" flex flex-col justify-end h-screen absolute top-0 w-full">
         <div className="h-[30%] p-6 bg-white relative">

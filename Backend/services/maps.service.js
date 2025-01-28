@@ -25,6 +25,8 @@ const captainModel = require('../models/captain.model');
 // };
 
 module.exports.getAddressCoordinate = async (address) => {
+  console.log(address, 'addddddddddd');
+
   const apiKey = process.env.OPENCAGE_API_KEY;
   const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
     address
