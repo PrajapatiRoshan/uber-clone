@@ -34,7 +34,7 @@ const rideSchema = new mongoose.Schema({
 
   distance: {
     type: Number,
-  }, // in meters
+  }, // in km
 
   paymentID: {
     type: String,
@@ -50,6 +50,24 @@ const rideSchema = new mongoose.Schema({
     type: String,
     select: false,
     required: true,
+  },
+
+  startLocation: {
+    ltd: {
+      type: Number,
+    },
+    lng: {
+      type: Number,
+    },
+  },
+
+  endLocation: {
+    ltd: {
+      type: Number,
+    },
+    lng: {
+      type: Number,
+    },
   },
 });
 

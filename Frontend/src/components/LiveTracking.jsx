@@ -1,83 +1,73 @@
-import React, { useState, useEffect, useRef } from 'react';
-import L from 'leaflet'; // Import Leaflet
-import OpenCageClient from 'opencage-api-client'; // Import OpenCage API client
+import React, { useState, useEffect } from 'react';
 
-const containerStyle = {
-  width: '100%',
-  height: '100%',
-};
+const LiveTracking = (props) => {
+  const [map, setMap] = useState(null);
+  const [marker, setMarker] = useState(null);
+  const [currentPosition, setCurrentPosition] = useState({ lat: 28.6139, lng: 77.209 }); // Default: New Delhi
+  const [destination, setDestination] = useState(); // Example destination: Delhi
 
-const center = {
-  lat: -3.745,
-  lng: -38.523,
-};
-
-const LiveTracking = () => {
-  const [currentPosition, setCurrentPosition] = useState(center);
-  const [address, setAddress] = useState('');
-  const mapRef = useRef(null); // Ref to hold the map instance
-  const markerRef = useRef(null); // Ref to hold the marker instance
-
-  // Set up the Leaflet map
   useEffect(() => {
-    // Initialize map only once
-    const map = L.map('map').setView([currentPosition.lat, currentPosition.lng], 15); // Initialize map with center position
-    mapRef.current = map; // Store map instance in ref
+    if (window.mappls) {
+      const mapInstance = new window.mappls.Map('map', {
+        center: currentPosition,
+        zoom: 15,
+        fullscreenControl: false,
+        scaleControl: false,
+      });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map); // Use OpenStreetMap tiles
+      setMap(mapInstance);
 
-    const marker = L.marker([currentPosition.lat, currentPosition.lng]).addTo(map); // Add marker for position
-    markerRef.current = marker; // Store marker instance in ref
+      const markerInstance = new window.mappls.Marker({
+        position: currentPosition,
+        map: mapInstance,
+      });
 
-    // Function to update position and address
-    const updatePosition = async () => {
-      try {
-        navigator.geolocation.getCurrentPosition(async (position) => {
-          const { latitude = 50, longitude = 10 } = position.coords;
-          setCurrentPosition({
-            lat: latitude,
-            lng: longitude,
-          });
+      setMarker(markerInstance);
+    }
+  }, []);
 
-          // Reverse geocode using OpenCage API
-          const response = await OpenCageClient.geocode({
-            q: `${latitude},${longitude}`,
-            key: import.meta.env.VITE_OPENCAGE_API_KEY, // Assuming API key is stored in environment variable
-          });
+  useEffect(() => {
+    const updatePosition = (position) => {
+      const { latitude, longitude } = position.coords;
+      const newPosition = { lat: latitude, lng: longitude };
+      setCurrentPosition(newPosition);
 
-          if (response.results.length > 0) {
-            const location = response.results[0].formatted;
-            setAddress(location);
-            console.log('Address:', location); // Logs the address
-          }
-
-          // Update marker position and map center
-          markerRef.current.setLatLng([latitude, longitude]);
-          mapRef.current.setView([latitude, longitude], 15); // Update map center with new position
-        });
-      } catch (error) {
-        console.error('Error retrieving position or geocoding:', error);
+      if (marker) marker.setPosition(newPosition);
+      if (map) {
+        map.setCenter(newPosition);
+        // drawRoute(newPosition, destination); // Draw route on position update
       }
     };
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(updatePosition);
+    }
+  }, [map, marker]);
 
-    updatePosition(); // Initial position update
-    const intervalId = setInterval(updatePosition, 10000); // Update every 10 seconds
+  useEffect(() => {
+    props?.ride && setDestination(props.ride.endLocation);
+  }, [props?.ride]);
 
-    return () => {
-      clearInterval(intervalId); // Clean up interval on unmount
-      map.remove(); // Clean up the map on unmount
+  useEffect(() => {
+    const drawRoute = (origin, destination) => {
+      if (!window?.mappls || !window?.mappls?.direction) return;
+      window.mappls.direction({
+        map: map,
+        start: `${origin.lat},${origin.lng}`,
+        end: `${destination.lat},${destination.lng}`,
+        fitBounds: true,
+        callback: function (response) {
+          console.log('Route Data:', response);
+        },
+      });
     };
-  }, []); // Empty dependency array, run only on mount and unmount
 
-  return (
-    <div>
-      <div id="map" style={containerStyle}></div> {/* Leaflet map container */}
-      <div>
-        <h3>Current Address:</h3>
-        <p>{address}</p>
-      </div>
-    </div>
-  );
+    if (destination && marker) {
+      marker?.setPosition({ lat: destination.ltd, lng: destination.lng });
+      drawRoute(currentPosition, destination);
+    }
+  }, [destination]);
+
+  return <div id="map" className="w-full h-full"></div>;
 };
 
 export default LiveTracking;

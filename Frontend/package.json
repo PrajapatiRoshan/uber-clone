@@ -15,6 +15,7 @@
     "axios": "^1.7.9",
     "gsap": "^3.12.7",
     "leaflet": "^1.9.4",
+    "mappls-web-maps": "^3.5.8",
     "opencage-api-client": "^1.0.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

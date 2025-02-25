@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CaptainDataContext } from '../context/CaptainContext';
 
 const CaptainLoginPage = () => {
-  const [captainData, setCaptainData] = useState({ email: '', password: '' });
   const { captain, setCaptain } = useContext(CaptainDataContext);
   const navigate = useNavigate();
 
@@ -27,8 +26,6 @@ const CaptainLoginPage = () => {
       localStorage.setItem('token', data.token);
       navigate('/captain-home');
     }
-
-    console.log(formValues);
   };
 
   return (

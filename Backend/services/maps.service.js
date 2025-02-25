@@ -25,8 +25,6 @@ const captainModel = require('../models/captain.model');
 // };
 
 module.exports.getAddressCoordinate = async (address) => {
-  console.log(address, 'addddddddddd');
-
   const apiKey = process.env.OPENCAGE_API_KEY;
   const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
     address
@@ -81,11 +79,13 @@ module.exports.getDistanceTime = async (origin, destination) => {
     );
 
     // Assuming average driving speed of 50 km/h for duration estimation
-    const duration = (distance / 50) * 60; // Duration in minutes
+    const duration = (distance / 20) * 60; // Duration in minutes
 
     return {
       distance: distance, // in km
       duration: duration, // in minutes
+      originCoord,
+      destinationCoord,
     };
   } catch (err) {
     console.error(err);
@@ -133,7 +133,9 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
 
   try {
     const response = await axios.get(url);
-    if (response.data.results.length > 0) {
+    console.log(response.data, '----------jjjjjjjjjjjj');
+
+    if (response.data.results.length) {
       return response.data.results
         .map((prediction) => prediction.formatted)
         .filter((value) => value);
@@ -141,7 +143,7 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
       throw new Error('Unable to fetch suggestions');
     }
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     throw err;
   }
 };
@@ -176,7 +178,7 @@ module.exports.getCaptainsInTheRadius = async (ltd, lng, radius) => {
   const captains = await captainModel.find({
     location: {
       $geoWithin: {
-        $centerSphere: [[ltd, lng], radius / 6371],
+        $centerSphere: [[ltd, lng], radius / 6371], // Corrected order and Earth's radius
       },
     },
   });

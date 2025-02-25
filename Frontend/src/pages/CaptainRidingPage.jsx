@@ -28,6 +28,9 @@ const CaptainRidingPage = () => {
 
   return (
     <div className="h-screen relative flex flex-col justify-end">
+      <div className="h-screen fixed w-screen top-0 ">
+        <LiveTracking ride={rideData} />
+      </div>
       <div className="fixed p-6 top-0 flex items-center justify-between w-screen">
         <img
           className="w-16"
@@ -61,10 +64,6 @@ const CaptainRidingPage = () => {
         className="fixed w-full z-[500] bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
       >
         <FinishRide ride={rideData} setFinishRidePanel={setFinishRidePanel} />
-      </div>
-
-      <div className="h-screen fixed w-screen top-0 z-[-1]">
-        <LiveTracking />
       </div>
     </div>
   );

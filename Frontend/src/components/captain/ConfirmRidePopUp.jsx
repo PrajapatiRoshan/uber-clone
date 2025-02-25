@@ -53,7 +53,7 @@ const ConfirmRidePopUp = (props) => {
         <h5 className="text-lg font-semibold">2.2 KM</h5>
       </div>
       <div className="flex gap-2 justify-between flex-col items-center">
-        <div className="w-full mt-5">
+        <div className="w-full mt-2">
           <div className="flex items-center gap-5 p-3 border-b-2">
             <i className="ri-map-pin-user-fill"></i>
             <div>
@@ -76,8 +76,7 @@ const ConfirmRidePopUp = (props) => {
             </div>
           </div>
         </div>
-
-        <div className="mt-6 w-full">
+        <div className=" w-full">
           <form onSubmit={submitHander}>
             <input
               value={otp}
@@ -87,7 +86,7 @@ const ConfirmRidePopUp = (props) => {
               placeholder="Enter OTP"
             />
 
-            <button className="w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg">
+            <button className="w-full mt-3 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg">
               Confirm
             </button>
             <button

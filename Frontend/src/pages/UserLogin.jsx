@@ -1,10 +1,9 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserDataContext } from '../context/userContext';
+import { UserDataContext } from '../context/UserContext';
 import axios from 'axios';
 
 const UserLoginPage = () => {
-  const [userData, setUserData] = useState({ email: '', password: '' });
   const { user, setUser } = useContext(UserDataContext);
   const navigate = useNavigate();
 
@@ -22,13 +21,11 @@ const UserLoginPage = () => {
     );
 
     if (response.status === 200) {
-      const data = response.data;
+      const { data } = response;
       setUser(data.user);
       localStorage.setItem('token', data.token);
       navigate('/home');
     }
-
-    console.log(formValues);
   };
 
   return (

@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { UserDataContext } from '../context/userContext';
+import { UserDataContext } from '../context/UserContext';
 
 const UserSignupPage = () => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const UserSignupPage = () => {
       navigate('/home');
     }
 
-    console.log(formValues, response);
+    // console.log(formValues, response);
     // setUserData(formValues);
   };
 

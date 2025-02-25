@@ -40,7 +40,7 @@ const CaptainpSignupPage = () => {
     }
 
     // setCaptainData(formValues);
-    console.log(formValues);
+    // console.log(formValues);
   };
   return (
     <div className="p-7 flex flex-col justify-between h-screen">

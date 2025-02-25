@@ -31,18 +31,18 @@ async function getFare(pickup, destination) {
   const fare = {
     auto: Math.round(
       baseFare.auto +
-        (distanceTime.distance.value / 1000) * perKmRate.auto +
-        (distanceTime.duration.value / 60) * perMinuteRate.auto
+        (distanceTime.distance / 1000) * perKmRate.auto +
+        (distanceTime.duration / 60) * perMinuteRate.auto
     ),
     car: Math.round(
       baseFare.car +
-        (distanceTime.distance.value / 1000) * perKmRate.car +
-        (distanceTime.duration.value / 60) * perMinuteRate.car
+        (distanceTime.distance / 1000) * perKmRate.car +
+        (distanceTime.duration / 60) * perMinuteRate.car
     ),
     moto: Math.round(
       baseFare.moto +
-        (distanceTime.distance.value / 1000) * perKmRate.moto +
-        (distanceTime.duration.value / 60) * perMinuteRate.moto
+        (distanceTime.distance / 1000) * perKmRate.moto +
+        (distanceTime.duration / 60) * perMinuteRate.moto
     ),
   };
 
@@ -59,7 +59,16 @@ function getOtp(num) {
   return generateOtp(num);
 }
 
-module.exports.createRide = async ({ user, pickup, destination, vehicleType }) => {
+module.exports.createRide = async ({
+  user,
+  pickup,
+  destination,
+  vehicleType,
+  distance,
+  duration,
+  startLocation,
+  endLocation,
+}) => {
   if (!user || !pickup || !destination || !vehicleType) {
     throw new Error('All fields are required');
   }
@@ -72,12 +81,16 @@ module.exports.createRide = async ({ user, pickup, destination, vehicleType }) =
     destination,
     otp: getOtp(6),
     fare: fare[vehicleType],
+    distance,
+    duration,
+    startLocation,
+    endLocation,
   });
 
   return ride;
 };
 
-module.exports.confirmRide = async ({ rideId, captain }) => {
+module.exports.confirmRide = async ({ rideId, captainId }) => {
   if (!rideId) {
     throw new Error('Ride id is required');
   }
@@ -88,7 +101,7 @@ module.exports.confirmRide = async ({ rideId, captain }) => {
     },
     {
       status: 'accepted',
-      captain: captain._id,
+      captain: captainId,
     }
   );
 

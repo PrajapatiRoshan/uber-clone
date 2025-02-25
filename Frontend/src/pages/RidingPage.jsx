@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SocketContext } from '../context/SocketContext';
+import LiveTracking from '../components/LiveTracking';
 
 const RidingPage = () => {
   const location = useLocation();
@@ -21,7 +22,7 @@ const RidingPage = () => {
         <i className="text-lg font-medium ri-home-5-line"></i>
       </Link>
       <div className="h-1/2">
-        <LiveTracking />
+        <LiveTracking ride={ride} />
       </div>
       <div className="h-1/2 p-4">
         <div className="flex items-center justify-between">

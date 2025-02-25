@@ -4,7 +4,6 @@ import gsap from 'gsap';
 import 'remixicon/fonts/remixicon.css';
 import VehiclePanel from '../components/users/VehiclePannel.jsx';
 import { useNavigate } from 'react-router-dom';
-import { UserDataContext } from '../context/userContext.jsx';
 import LocationSearchPannel from '../components/users/LocationSearchPannel.jsx';
 import ConfirmRide from '../components/users/ConfirmRide.jsx';
 import LookingForDriver from '../components/users/LookingForDriver.jsx';
@@ -12,6 +11,7 @@ import WaitingForDriver from '../components/users/WaitingForDriver.jsx';
 import LiveTracking from '../components/LiveTracking.jsx';
 import axios from 'axios';
 import { SocketContext } from '../context/SocketContext';
+import { UserDataContext } from '../context/UserContext.jsx';
 
 const HomePage = () => {
   const [pickup, setPickup] = useState('');
@@ -42,7 +42,7 @@ const HomePage = () => {
   const { user } = useContext(UserDataContext);
 
   useEffect(() => {
-    // socket.emit('join', { userType: 'user', userId: user._id });
+    socket.emit('join', { userType: 'user', userId: user?._id });
   }, [user]);
 
   socket.on('ride-confirmed', (ride) => {
@@ -52,9 +52,8 @@ const HomePage = () => {
   });
 
   socket.on('ride-started', (ride) => {
-    console.log('ride');
     setWaitingForDriver(false);
-    navigate('/riding', { state: { ride } }); // Updated navigate to include ride data
+    navigate('/riding', { state: { ride } }); // Updated navigate to include ride
   });
 
   const handlePickupChange = async (e) => {
@@ -69,9 +68,12 @@ const HomePage = () => {
           },
         }
       );
-      setPickupSuggestions(response.data);
-    } catch {
-      // handle error
+
+      if (response.status === 200) {
+        setPickupSuggestions(response.data);
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
@@ -87,15 +89,47 @@ const HomePage = () => {
           },
         }
       );
-      setDestinationSuggestions(response.data);
-    } catch {
-      // handle error
+      if (response.status === 200) {
+        setDestinationSuggestions(response.data);
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
+
+  async function findTrip() {
+    setVehiclePanel(true);
+    setPanelOpen(false);
+
+    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
+      params: { pickup, destination },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    setFare(response.data);
+  }
 
   const submitHandler = (e) => {
     e.preventDefault();
   };
+
+  async function createRide() {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/rides/create`,
+      {
+        pickup,
+        destination,
+        vehicleType,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      }
+    );
+  }
 
   useGSAP(
     function () {
@@ -130,7 +164,7 @@ const HomePage = () => {
         });
       } else {
         gsap.to(vehiclePanelRef.current, {
-          transform: 'translateY(100%)',
+          transform: 'translateY(1000px)',
         });
       }
     },
@@ -145,7 +179,7 @@ const HomePage = () => {
         });
       } else {
         gsap.to(confirmRidePanelRef.current, {
-          transform: 'translateY(100%)',
+          transform: 'translateY(1000px)',
         });
       }
     },
@@ -160,7 +194,7 @@ const HomePage = () => {
         });
       } else {
         gsap.to(vehicleFoundRef.current, {
-          transform: 'translateY(100%)',
+          transform: 'translateY(1000px)',
         });
       }
     },
@@ -175,60 +209,29 @@ const HomePage = () => {
         });
       } else {
         gsap.to(waitingForDriverRef.current, {
-          transform: 'translateY(100%)',
+          transform: 'translateY(1000px)',
         });
       }
     },
     [waitingForDriver]
   );
 
-  async function findTrip() {
-    setVehiclePanel(true);
-    setPanelOpen(false);
-
-    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
-      params: { pickup, destination },
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
-
-    setFare(response.data);
-  }
-
-  async function createRide() {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/rides/create`,
-      {
-        pickup,
-        destination,
-        vehicleType,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      }
-    );
-  }
-
   return (
     <div className="h-screen relative overflow-hidden">
+      <div
+        className={`h-screen w-screen ${
+          (pickup !== '' && destination !== '') || panelOpen ? 'z-0' : ''
+        } absolute`}
+      >
+        <LiveTracking />
+      </div>
       <img
         className="w-16 absolute left-5 top-5"
         src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
         alt=""
       />
-      <div className="h-screen w-screen">
-        <LiveTracking />
-        {/* <img
-          className="h-full w-full object-cover"
-          src="https://miro.medium.com/v2/resize:fit:720/format:webp/0*f4GFA9sUqA0uIUmW.jpg "
-          alt=""
-        /> */}
-      </div>
-      <div className=" flex flex-col justify-end h-screen absolute top-0 w-full">
-        <div className="h-[30%] p-6 bg-white relative">
+      <div className=" flex flex-col justify-end h-screen absolute top-0 w-full ">
+        <div className="h-[40%] p-5 bg-white relative ">
           <h5
             ref={panelCloseRef}
             onClick={() => {
@@ -271,7 +274,7 @@ const HomePage = () => {
             Find Trip
           </button>
         </div>
-        <div ref={panelRef} className="bg-white h-0">
+        <div ref={panelRef} className="bg-white h-0 overflow-y-scroll">
           <LocationSearchPannel
             suggestions={
               activeField === 'pickup' ? pickupSuggestions : destinationSuggestions
@@ -312,7 +315,6 @@ const HomePage = () => {
         className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
       >
         <LookingForDriver
-          createRide={createRide}
           pickup={pickup}
           destination={destination}
           fare={fare}
