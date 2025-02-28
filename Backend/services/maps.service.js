@@ -133,8 +133,6 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
 
   try {
     const response = await axios.get(url);
-    console.log(response.data, '----------jjjjjjjjjjjj');
-
     if (response.data.results.length) {
       return response.data.results
         .map((prediction) => prediction.formatted)
@@ -185,3 +183,4 @@ module.exports.getCaptainsInTheRadius = async (ltd, lng, radius) => {
 
   return captains;
 };
+

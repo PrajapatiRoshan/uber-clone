@@ -3,7 +3,10 @@ import React, { useState, useEffect } from 'react';
 const LiveTracking = (props) => {
   const [map, setMap] = useState(null);
   const [marker, setMarker] = useState(null);
-  const [currentPosition, setCurrentPosition] = useState({ lat: 28.6139, lng: 77.209 }); // Default: New Delhi
+  const [currentPosition, setCurrentPosition] = useState({
+    lat: 28.6139,
+    lng: 77.209,
+  }); // Default: New Delhi
   const [destination, setDestination] = useState(); // Example destination: Delhi
 
   useEffect(() => {
@@ -62,7 +65,7 @@ const LiveTracking = (props) => {
     };
 
     if (destination && marker) {
-      marker?.setPosition({ lat: destination.ltd, lng: destination.lng });
+      // marker?.setPosition({ lat: destination.ltd, lng: destination.lng });
       drawRoute(currentPosition, destination);
     }
   }, [destination]);
@@ -71,3 +74,4 @@ const LiveTracking = (props) => {
 };
 
 export default LiveTracking;
+
