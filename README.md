@@ -32,7 +32,9 @@ PORT=your_server_port
 
 ## Backend Services and Routes
 
-### Address Geocoding
+### Map Routes
+
+#### Address Geocoding
 
 **Endpoint**: `/api/maps/address-coordinate`  
 **Method**: `POST`  
