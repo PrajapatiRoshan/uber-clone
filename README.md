@@ -158,6 +158,158 @@ curl -X POST http://localhost:your_server_port/api/maps/autocomplete -H "Content
 curl -X POST http://localhost:your_server_port/api/maps/captains-in-radius -H "Content-Type: application/json" -d '{"ltd": 19.2183, "lng": 72.9781, "radius": 5}'
 ```
 
+### User Routes
+
+#### User Registration
+
+**Endpoint**: `/api/users/register`  
+**Method**: `POST`  
+**Description**: Register a new user.  
+**Request Body**:
+
+```json
+{
+  "name": "string",
+  "email": "string",
+  "password": "string"
+}
+```
+
+**Response**:
+
+```json
+{
+  "id": "string",
+  "name": "string",
+  "email": "string"
+}
+```
+
+#### User Login
+
+**Endpoint**: `/api/users/login`  
+**Method**: `POST`  
+**Description**: Authenticate a user and return a token.  
+**Request Body**:
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+**Response**:
+
+```json
+{
+  "token": "string"
+}
+```
+
+### Captain Routes
+
+#### Captain Registration
+
+**Endpoint**: `/api/captains/register`  
+**Method**: `POST`  
+**Description**: Register a new captain.  
+**Request Body**:
+
+```json
+{
+  "name": "string",
+  "email": "string",
+  "password": "string",
+  "vehicle": "string"
+}
+```
+
+**Response**:
+
+```json
+{
+  "id": "string",
+  "name": "string",
+  "email": "string",
+  "vehicle": "string"
+}
+```
+
+#### Captain Login
+
+**Endpoint**: `/api/captains/login`  
+**Method**: `POST`  
+**Description**: Authenticate a captain and return a token.  
+**Request Body**:
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+**Response**:
+
+```json
+{
+  "token": "string"
+}
+```
+
+### Ride Routes
+
+#### Create Ride
+
+**Endpoint**: `/api/rides`  
+**Method**: `POST`  
+**Description**: Create a new ride.  
+**Request Body**:
+
+```json
+{
+  "userId": "string",
+  "captainId": "string",
+  "origin": "string",
+  "destination": "string",
+  "fare": "number"
+}
+```
+
+**Response**:
+
+```json
+{
+  "id": "string",
+  "userId": "string",
+  "captainId": "string",
+  "origin": "string",
+  "destination": "string",
+  "fare": "number",
+  "status": "string"
+}
+```
+
+#### Get Ride Details
+
+**Endpoint**: `/api/rides/:id`  
+**Method**: `GET`  
+**Description**: Get details of a specific ride.  
+**Response**:
+
+```json
+{
+  "id": "string",
+  "userId": "string",
+  "captainId": "string",
+  "origin": "string",
+  "destination": "string",
+  "fare": "number",
+  "status": "string"
+}
+```
+
 ## How to Run the Project
 
 1. Clone the repository:
@@ -218,6 +370,65 @@ uber-clone/
 ├── .env
 ├── package.json
 └── readme.md
+```
+
+## Backend `package.json`
+
+```json
+{
+  "name": "uber-clone-backend",
+  "version": "1.0.0",
+  "description": "Backend for Uber Clone project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
+```
+
+## Frontend `package.json`
+
+```json
+{
+  "name": "uber-clone-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.21.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-redux": "^7.2.2",
+    "react-scripts": "4.0.0",
+    "redux": "^4.0.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": ["react-app", "react-app/jest"]
+  },
+  "browserslist": {
+    "production": [">0.2%", "not dead", "not op_mini all"],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
 ```
 
 ## Conclusion
