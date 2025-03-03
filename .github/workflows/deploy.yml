@@ -16,13 +16,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18' # Use the latest LTS version
+          node-version: '18' # Use latest LTS version
 
-      - name: Navigate to frontend directory
-        run: cd frontend
+      - name: Debug - List project files
+        run: ls -l # Check if frontend folder exists
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
         working-directory: ./frontend
 
       - name: Build project
