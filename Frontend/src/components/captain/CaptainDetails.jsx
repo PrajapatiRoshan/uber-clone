@@ -18,7 +18,7 @@ const CaptainDetails = () => {
           </h4>
         </div>
         <div>
-          <h4 className="text-xl font-semibold">₹295.20</h4>
+          <h4 className="text-xl font-semibold">₹{captain?.totalEarning}</h4>
           <p className="text-sm text-gray-600">Earned</p>
         </div>
       </div>
@@ -30,13 +30,13 @@ const CaptainDetails = () => {
         </div>
         <div className="text-center">
           <i className="text-3xl mb-2 font-thin ri-speed-up-line"></i>
-          <h5 className="text-lg font-medium">10.2</h5>
-          <p className="text-sm text-gray-600">Hours Online</p>
+          <h5 className="text-lg font-medium">{captain?.totalTrips}</h5>
+          <p className="text-sm text-gray-600">Total Trips</p>
         </div>
         <div className="text-center">
           <i className="text-3xl mb-2 font-thin ri-booklet-line"></i>
-          <h5 className="text-lg font-medium">10.2</h5>
-          <p className="text-sm text-gray-600">Hours Online</p>
+          <h5 className="text-lg font-medium">{captain?.totalDistance.toFixed(2)}</h5>
+          <p className="text-sm text-gray-600">Total distance</p>
         </div>
       </div>
     </div>
@@ -44,3 +44,4 @@ const CaptainDetails = () => {
 };
 
 export default CaptainDetails;
+

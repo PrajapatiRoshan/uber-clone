@@ -37,3 +37,25 @@ module.exports.createCaptain = async ({
   });
   return captain;
 };
+
+module.exports.updateEarnig = async ({ captainId, earnings, distance }) => {
+  if (!captainId) {
+    throw new Error('Captain id is required');
+  }
+
+  const che = await captainModel.findOneAndUpdate(
+    { _id: captainId },
+    {
+      $inc: { totalTrips: 1 },
+      $set: {
+        totalEarning: earnings,
+        totalDistance: distance,
+      },
+    },
+    { new: true }
+  );
+
+  const captain = await captainModel.findOne({ _id: captainId });
+  return captain;
+};
+

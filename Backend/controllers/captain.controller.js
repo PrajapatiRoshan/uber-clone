@@ -79,3 +79,22 @@ module.exports.logoutCaptain = async (req, res, next) => {
   res.clearCookie('token');
   res.status(201).json({ message: 'Logged out' });
 };
+
+module.exports.updateCaptainProfile = async (req, res, next) => {
+  let { earnings, distance } = req.body;
+  const { captain } = req;
+
+  earnings += Number(captain.totalEarning);
+  distance += Number(captain.totalDistance);
+  try {
+    const captainUp = await captainService.updateEarnig({
+      captainId: captain._id,
+      earnings,
+      distance,
+    });
+    return res.status(200).json(captainUp);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+

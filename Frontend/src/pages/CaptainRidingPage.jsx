@@ -29,7 +29,7 @@ const CaptainRidingPage = () => {
   return (
     <div className="h-screen relative flex flex-col justify-end">
       <div className="h-screen fixed w-screen top-0 ">
-        <LiveTracking ride={rideData} />
+        <LiveTracking ride={rideData} type={'captain'} />
       </div>
       <div className="fixed p-6 top-0 flex items-center justify-between w-screen">
         <img
@@ -70,3 +70,4 @@ const CaptainRidingPage = () => {
 };
 
 export default CaptainRidingPage;
+

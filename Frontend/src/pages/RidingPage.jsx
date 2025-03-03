@@ -21,10 +21,10 @@ const RidingPage = () => {
       >
         <i className="text-lg font-medium ri-home-5-line"></i>
       </Link>
-      <div className="h-1/2">
-        <LiveTracking ride={ride} />
+      <div className="h-[58%]">
+        <LiveTracking ride={ride} type={'user'} />
       </div>
-      <div className="h-1/2 p-4">
+      <div className="h-[42%] p-4">
         <div className="flex items-center justify-between">
           <img
             className="h-12"
@@ -47,7 +47,7 @@ const RidingPage = () => {
             <div className="flex items-center gap-5 p-3 border-b-2">
               <i className="text-lg ri-map-pin-2-fill"></i>
               <div>
-                <h3 className="text-lg font-medium">562/11-A</h3>
+                {/* <h3 className="text-lg font-medium">562/11-A</h3> */}
                 <p className="text-sm -mt-1 text-gray-600">{ride?.destination}</p>
               </div>
             </div>
@@ -69,3 +69,4 @@ const RidingPage = () => {
 };
 
 export default RidingPage;
+
