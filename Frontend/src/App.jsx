@@ -5,7 +5,7 @@ import UserSignupPage from './pages/UserSignup';
 import CaptainLoginPage from './pages/CaptainLogin';
 import CaptainSignupPage from './pages/CaptainSignup';
 import HomePage from './pages/Home';
-import UserProtectWrapperPage from './pages/userProtectWrapper';
+import UserProtectWrapperPage from './pages/UserProtectWrapper';
 import UserLogoutPage from './pages/UserLogout';
 import CaptainHomePage from './pages/CaptainHome';
 import CaptainProtectWrapper from './pages/CaptainProtectWrapper copy';
