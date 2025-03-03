@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: '18' # Use the latest LTS version
 
+      - name: Navigate to frontend directory
+        run: cd frontend
+
       - name: Install dependencies
         run: npm install
         working-directory: ./frontend
